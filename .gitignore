@@ -1,0 +1,18 @@
+# ACE-Step clone, weights and generated intermediates
+music/repo/
+music/out*/
+music/*.log
+music/raw_*.wav
+music/track_v1.*
+music/loop.wav
+# rendered video (75 MB loop, old versions) and build intermediates
+video/*.mp4
+video/*.log
+video/work/
+video/tools/vis
+video/description_v1.txt
+# unused CC BY 4.0 640px previews (not in the final cut)
+images/[0-9][0-9]_*.jpg
+.DS_Store
+music/loop.mp3
+video/build.py

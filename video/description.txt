@@ -1,0 +1,28 @@
+Seamless 76.8 s loop (cuts every 1.2-2.4 s over a 75 bpm instrumental) of warm textures and details from the National Museum of Taiwan History collection.
+
+All images are released by the museum under CC0 1.0 (public domain dedication) — no attribution is required; credited here as a courtesy:
+https://creativecommons.org/publicdomain/zero/1.0/
+Source: https://collections.nmth.gov.tw/ (國立臺灣歷史博物館 / National Museum of Taiwan History)
+
+- 「盧修一、陳郁秀所有竹製謝籃」(2021.008.0151) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2021.008.0151
+- 「陳澄波於水上公學校任職時的教師文官制服配件」(2016.040.0124) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2016.040.0124
+- 「木魚」(2004.025.1077.0001) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2004.025.1077.0001
+- 「釉上彩印丼飯碗」(2003.001.0856) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2003.001.0856
+- 「長條板四八角糕印模」(2002.008.0245.0001) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2002.008.0245.0001
+- 「漆器茶壺」(2002.004.0107.0002) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2002.004.0107.0002
+- 「幸福牌自行車」(2000.001.0041) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2000.001.0041
+- 「木製小方椅」(2006.003.0080.0002) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2006.003.0080.0002
+- 「點心籃提籃」(2000.001.0010.0003) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2000.001.0010.0003
+- 「日本佔領下的臺灣攝影集」(2010.018.0008) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2010.018.0008
+- 「引磬」(2004.025.1077.0007) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2004.025.1077.0007
+- 「朱漆金彩檳榔籃」(2017.043.0054) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2017.043.0054
+- 「長條板四圓糕印上組件」(2002.008.0256.0001) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2002.008.0256.0001
+- 「畫筆」(2016.042.0012) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2016.042.0012
+- 「屋頂風獅爺雌性」(2001.001.0340.0002) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2001.001.0340.0002
+- 「同治10年(1871年)吳振秀執照」(2017.025.0234) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2017.025.0234
+- 「陳澄波就讀東京美術學校制服配件」(2016.040.0125) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2016.040.0125
+
+Images are cropped, color-graded and animated for this video.
+
+Music: AI-generated instrumental made with ACE-Step 1.5 (https://github.com/ace-step/ACE-Step-1.5).
+Built with scripts from https://github.com/ChihChengLiang/montage
