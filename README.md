@@ -37,20 +37,39 @@ Prompts, seeds and findings are in `music/README.md`.
 Needs macOS (Vision framework), Python 3 with `numpy`, `opencv-python`, `pillow`, ffmpeg and `swiftc`.
 
 ```bash
-# 1. focal point + text analysis
-swiftc -O video/tools/vis.swift -o video/tools/vis
-mkdir -p video/work/an
-for f in images/c*.jpg; do n=$(basename "$f" .jpg); video/tools/vis "$f" > "video/work/an/$n.json"; done
-
-# 2. music: see music/README.md (ACE-Step setup + generation, ~10 GB of weights), then
-python3 music/align_beats.py      # writes music/loop_aligned.wav
-
-# 3. render (about 12 minutes)
-python3 video/build_loop.py
+video/analyze.sh                  # compiles video/tools/vis, writes focal-point + text analysis to video/work/an/
+python3 video/build_loop.py       # renders (about 12 minutes) -> video/loop.mp4, video/description.txt, video/work/contact.jpg
 ```
 
-`build_loop.py` muxes `music/loop_aligned.wav`, which is committed, so steps 1 and 3 are enough to reproduce the
-video without installing ACE-Step.
+Optional: `python3 video/build_loop.py --check` validates inputs (images, analysis, credits, audio length) and prints
+the shot plan without rendering; `python3 video/qc.py` prints duration, frame count, luma stats and the loop-seam
+difference of the rendered file.
+
+Music: see `music/README.md` (ACE-Step setup + generation, ~10 GB of weights), then `python3 music/align_beats.py`
+writes `music/loop_aligned.wav`. That file is committed, so the two commands above reproduce the video without
+installing ACE-Step.
+
+### Reusing the pipeline for other images
+
+Everything set-specific lives in `montage.json` (paths are relative to that file; pass another config as the last
+argument to any command, e.g. `python3 video/build_loop.py other.json`):
+
+| key | meaning |
+|---|---|
+| `images_dir`, `image_glob`, `drop` | where the images are, which files to take, image keys to skip (key = file name up to the first `_`) |
+| `credits_file`, `license_filter` | JSON list with `file`, `title`, `accession_no`, `license`, `source_page` per image; only entries whose license starts with the filter are used |
+| `manual_safe_rects` | `{key: [x0,y0,x1,y1]}` fractions, for images whose subject fills the frame (keeps crops off edges/labels) |
+| `width`, `height`, `fps`, `bpm`, `loop_beats` | output format and the cut grid; loop length = `loop_beats * 60 / bpm` s |
+| `shot_cycle_beats`, `dissolve`, `push_in` | shot-length cycle (must fill `loop_beats` exactly), short dissolve on long shots, push-in amount |
+| `crop` | `min_width` (source px), crop sizes, `roles` per image and `extra_roles` per image key |
+| `grade` | warm tint, black lift, gamma, saturation, vignette, grain, highlight knee, exposure targets |
+| `x264`, `audio`, `out_dir`, `work_dir`, `out_name`, `seed` | encode targets (2-pass bitrate), audio file to mux, output locations, grain seed |
+| `description` | `lines` for `description.txt` (`{credits}` expands to one line per used item using `credit_line`) |
+
+Not parameterised: the 16:9 crop aspect, the saliency/gradient scoring weights, the focal-point drift, and the
+hard-coded `swiftc`/Vision analysis (macOS only).
+
+`build_loop.py` muxes the `audio` file if it exists, otherwise leaves `loop_silent.mp4`.
 
 ## Caveats
 

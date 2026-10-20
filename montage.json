@@ -1,0 +1,119 @@
+{
+ "images_dir": "images",
+ "credits_file": "images/credits.json",
+ "image_glob": "c*.jpg",
+ "license_filter": "CC0",
+ "drop": [
+  "c07",
+  "c09",
+  "c16",
+  "c19",
+  "c21"
+ ],
+ "manual_safe_rects": {
+  "c12": [
+   0.04,
+   0.05,
+   0.96,
+   0.83
+  ],
+  "c22": [
+   0.07,
+   0.04,
+   0.93,
+   0.87
+  ]
+ },
+ "width": 1920,
+ "height": 1080,
+ "fps": 30,
+ "bpm": 100,
+ "loop_beats": 128,
+ "shot_cycle_beats": [
+  2,
+  2,
+  2,
+  2,
+  4
+ ],
+ "dissolve": {
+  "min_beats": 4,
+  "frames": 3
+ },
+ "push_in": 0.04,
+ "crop": {
+  "min_width": 1300,
+  "hero_min_frac": 0.5,
+  "detail_width_frac": 0.38,
+  "texture_width_mult": 1.02,
+  "roles": [
+   "hero",
+   "detail",
+   "texture"
+  ],
+  "extra_roles": {
+   "c03": [
+    "wide"
+   ],
+   "c12": [
+    "wide"
+   ]
+  }
+ },
+ "grade": {
+  "warm": [
+   1.07,
+   0.98,
+   0.84
+  ],
+  "lift": [
+   0.055,
+   0.04,
+   0.028
+  ],
+  "gamma": 0.9,
+  "saturation": 0.84,
+  "cool_desat": 0.38,
+  "scurve": 0.2,
+  "vignette": 0.16,
+  "vignette_start": 0.5,
+  "grain": 0.007,
+  "knee": 0.84,
+  "top": 0.935,
+  "object_target": 0.42,
+  "fill_target": 0.52,
+  "object_mask_delta": 0.1,
+  "expo_min": 0.9,
+  "expo_max": 1.7,
+  "p98_cap": 0.97
+ },
+ "x264": {
+  "intermediate_crf": 10,
+  "bitrate": "7700k",
+  "maxrate": "11000k",
+  "bufsize": "16000k",
+  "audio_bitrate": "192k"
+ },
+ "audio": "music/loop_aligned.wav",
+ "out_dir": "video",
+ "work_dir": "video/work",
+ "out_name": "loop",
+ "seed": 11,
+ "description": {
+  "lines": [
+   "Seamless 76.8 s loop (cuts every 1.2-2.4 s over a 75 bpm instrumental) of warm textures and details from the National Museum of Taiwan History collection.",
+   "",
+   "All images are released by the museum under CC0 1.0 (public domain dedication) — no attribution is required; credited here as a courtesy:",
+   "https://creativecommons.org/publicdomain/zero/1.0/",
+   "Source: https://collections.nmth.gov.tw/ (國立臺灣歷史博物館 / National Museum of Taiwan History)",
+   "",
+   "{credits}",
+   "",
+   "Images are cropped, color-graded and animated for this video.",
+   "",
+   "Music: AI-generated instrumental made with ACE-Step 1.5 (https://github.com/ace-step/ACE-Step-1.5).",
+   "Built with scripts from https://github.com/ChihChengLiang/montage"
+  ],
+  "credit_line": "- 「{title}」({accession_no}) — {source_page}"
+ }
+}
