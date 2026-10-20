@@ -195,9 +195,9 @@ else: print("no music/loop_aligned.wav yet")
 # description
 seen = {}
 for d, p in shots: seen.setdefault(d["c"]["accession_no"], d["c"])
-L = ["Seamless 76.8 s loop (128 beats @ 100 bpm) of warm textures and details from the National Museum of Taiwan History collection.", "",
+L = ["Seamless 76.8 s loop (cuts every 1.2-2.4 s over a 75 bpm instrumental) of warm textures and details from the National Museum of Taiwan History collection.", "",
  "All images are released by the museum under CC0 1.0 (public domain dedication) — no attribution is required; credited here as a courtesy:",
  "https://creativecommons.org/publicdomain/zero/1.0/", "Source: https://collections.nmth.gov.tw/ (國立臺灣歷史博物館 / National Museum of Taiwan History)", ""]
 for r_, c in seen.items(): L.append(f"- 「{c['title']}」({r_}) — {c['source_page']}")
-L += ["", "Images are cropped, color-graded and animated for this video."]
+L += ["", "Images are cropped, color-graded and animated for this video.", "", "Music: AI-generated instrumental made with ACE-Step 1.5 (https://github.com/ace-step/ACE-Step-1.5).", "Built with scripts from https://github.com/ChihChengLiang/montage"]
 open(f"{VID}/description.txt", "w").write("\n".join(L) + "\n")
