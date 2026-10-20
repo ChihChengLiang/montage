@@ -51,7 +51,8 @@ def load(file):
     else:
         m = sm[mask].mean(0); gains = 1 + 0.5 * (m.mean() / m - 1)
     gains = np.clip(gains, 0.8, 1.3).astype(np.float32)
-    return dict(file=file, key=key, im=im, w=w, h=h, safe=safe, G=G, F=F, s=s, fb=fb, focal=focal, gains=gains, c=cred[file])
+    bgl = float((np.median(sm[bgm], 0) * gains * [0.299, 0.587, 0.114]).sum() / 255) if (bgm.sum() > 0.12 * mask.sum() and key not in MANUAL) else None
+    return dict(file=file, key=key, bg=bgl, im=im, w=w, h=h, safe=safe, G=G, F=F, s=s, fb=fb, focal=focal, gains=gains, c=cred[file])
 
 def win_score(d, cx, cy, cw, mode):
     s = d["s"]; ch = cw * 9 / 16
@@ -118,21 +119,24 @@ assert len(pattern) == len(shots) and sum(pattern) == 128
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 r = np.hypot((xx - W/2) / (W/2), (yy - H/2) / (H/2))
-VIG = (1 - 0.22 * np.clip(r - 0.45, 0, 1) ** 1.6)[..., None].astype(np.float32)
-WARM = np.array([1.10, 0.97, 0.78], np.float32)         # amber/honey highlights
-LIFT = np.array([0.105, 0.072, 0.050], np.float32)       # brown lifted blacks
+VIG = (1 - 0.16 * np.clip(r - 0.5, 0, 1) ** 1.6)[..., None].astype(np.float32)
+WARM = np.array([1.07, 0.98, 0.84], np.float32)         # amber/honey highlights
+LIFT = np.array([0.055, 0.040, 0.028], np.float32)       # slight brown lifted blacks
+KNEE, TOP = 0.84, 0.935                                   # soft highlight limiter (max ~235)
 
 def grade(a, gain, expo):
-    a = np.clip(a / 255.0 * gain * expo, 0, 1)
+    a = a / 255.0 * gain * expo
     l = (a * [0.299, 0.587, 0.114]).sum(2, keepdims=True)
     cool = np.clip((np.maximum(a[..., 1], a[..., 2]) - a[..., 0])[..., None] * 3.0, 0, 1)   # blues/greens
-    sat = 0.82 - 0.40 * cool
-    a = l + (a - l) * sat
-    a = a * (1 + (WARM - 1) * (0.55 + 0.45 * l))          # warm, stronger in highlights
-    a = a + (a - 0.5) * 0.12                              # gentle contrast
-    a = LIFT * (1 - l) ** 1.5 + a * (1 - 0.88 * LIFT.mean() * 0 - 0.0) * 0.92
+    a = l + (a - l) * (0.84 - 0.38 * cool)
+    a = a * (1 + (WARM - 1) * (0.5 + 0.5 * np.clip(l, 0, 1)))   # warm, stronger in highlights
+    a = np.clip(a, 0, 1.3) ** 0.9                                # midtone brightening
+    sm_ = np.clip(a, 0, 1); a = a * 0.8 + 0.2 * (sm_ * sm_ * (3 - 2 * sm_))   # gentle S-curve
+    a = a + LIFT * (1 - np.clip(l, 0, 1)) ** 2                   # brown-tinted shadows
     a = a * VIG
-    a = a + rng.normal(0, 0.009, (H, W, 1)).astype(np.float32)   # light luma grain
+    hi = a > KNEE                                                # soft knee: no clipping to 255
+    a = np.where(hi, KNEE + (TOP - KNEE) * (1 - np.exp(-(a - KNEE) / (TOP - KNEE))), a)
+    a = a + rng.normal(0, 0.007, (H, W, 1)).astype(np.float32)   # light luma grain
     return (np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8)
 
 inter = f"{WK}/inter.mp4"
@@ -144,8 +148,13 @@ for si, ((d, p), beats) in enumerate(zip(shots, pattern)):
     cw0, ch0 = p["cw"], p["cw"] * 9 / 16
     # exposure normalise per shot from first-frame crop
     t = im.crop((p["cx"]-cw0/2, p["cy"]-ch0/2, p["cx"]+cw0/2, p["cy"]+ch0/2)).resize((192, 108))
-    ta = np.asarray(t, np.float32) / 255 * d["gains"]; ml = float((ta * [0.299, 0.587, 0.114]).sum(2).mean())
-    expo = float(np.clip((0.40 / max(ml, 0.02)) ** 0.7, 0.55, 1.5))
+    L = (np.asarray(t, np.float32) / 255 * d["gains"] * [0.299, 0.587, 0.114]).sum(2)
+    p98 = float(np.percentile(L, 98))
+    obj = np.abs(L - d["bg"]) > 0.10 if d["bg"] is not None else np.ones_like(L, bool)   # object mask = not-backdrop
+    if obj.mean() > 0.05:
+        ml = float(L[obj].mean()); expo = (0.42 / max(ml, 0.03)) ** 0.6 if d["bg"] is not None else (0.52 / max(ml, 0.03)) ** 0.8
+    else: expo = 1.0
+    expo = float(np.clip(expo, 0.9, 1.7)); expo = min(expo, 0.97 / max(p98, 0.05))   # backdrop stays bright cream, no clipping
     for f in range(nf):
         u = f / (nf - 1); u = (1 - u) if last else u
         z = 1 - 0.04 * u

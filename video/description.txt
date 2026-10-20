@@ -1,4 +1,4 @@
-Seamless 76.8 s loop (cuts every 1.2-2.4 s over a 75 bpm instrumental) of warm textures and details from the National Museum of Taiwan History collection.
+Seamless 76.8 s loop (128 beats @ 100 bpm) of warm textures and details from the National Museum of Taiwan History collection.
 
 All images are released by the museum under CC0 1.0 (public domain dedication) — no attribution is required; credited here as a courtesy:
 https://creativecommons.org/publicdomain/zero/1.0/
@@ -23,6 +23,3 @@ Source: https://collections.nmth.gov.tw/ (國立臺灣歷史博物館 / National
 - 「陳澄波就讀東京美術學校制服配件」(2016.040.0125) — https://collections.nmth.gov.tw/CollectionContent.aspx?a=132&rno=2016.040.0125
 
 Images are cropped, color-graded and animated for this video.
-
-Music: AI-generated instrumental made with ACE-Step 1.5 (https://github.com/ace-step/ACE-Step-1.5).
-Built with scripts from https://github.com/ChihChengLiang/montage
