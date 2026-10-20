@@ -71,6 +71,24 @@ hard-coded `swiftc`/Vision analysis (macOS only).
 
 `build_loop.py` muxes the `audio` file if it exists, otherwise leaves `loop_silent.mp4`.
 
+## Second set: John Gould bird plates
+
+`gould.json` builds a second loop (79.1 s, 2373 frames) from 24 public-domain plates of *The Birds of Asia*
+(Wikimedia Commons scans, licences recorded per file in `images_gould/credits.json`) with a gentler 85 bpm
+instrumental. The scans are not committed:
+
+```bash
+python3 scripts/fetch_images.py images_gould/credits.json   # re-download from Commons
+video/analyze.sh gould.json
+python3 video/build_loop.py gould.json                       # -> video/gould_loop.mp4, video/gould_description.txt
+```
+
+Differences from the wood loop: lighter paper-toned grade that keeps plumage colours true, crops restricted to
+the printed area of each plate, and a non-integer beat grid (`beat_seconds` 0.70625 = 21.19 frames per beat, cut
+boundaries rounded to the nearest frame). The music loop is time-stretched by 0.015% (`music/fit_loop.py`) so it is
+exactly 2373 frames long; the stretch is circular, so the loop stays seamless. NMTH holds a 20-plate Gould set but
+its images carry no verified licence and are 640 px, so none are used.
+
 ## Caveats
 
 - Nobody has listened to the generated music in the build process; check the loop point and the tempo by ear.

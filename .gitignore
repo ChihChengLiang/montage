@@ -16,3 +16,12 @@ images/[0-9][0-9]_*.jpg
 .DS_Store
 music/loop.mp3
 video/build.py
+# Gould set: scans are re-fetched from Wikimedia Commons (scripts/fetch_images.py); keep credits only
+images_gould/*.jpg
+video/work_gould/
+music/ana-venv/
+music/out_gould/
+music/gould_raw.wav
+music/gould_loop.wav
+music/gould_loop_aligned.wav
+music/gould_loop_aligned.mp3

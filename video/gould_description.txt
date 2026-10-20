@@ -1,0 +1,32 @@
+Seamless looping base layer: crops of John Gould's hand-coloured bird plates from The Birds of Asia (1850-1883), cut on the beat over an AI-generated instrumental.
+
+The plates are in the public domain (John Gould, 1804-1881; lithographers H. C. Richter and others). Scans are from Wikimedia Commons, taken from Internet Archive / Smithsonian Libraries digitisations of The Birds of Asia; the licence of each file was checked on its Commons file page (PD-art-100 / PD-old). No attribution is required; credited as a courtesy:
+- Urocissa caerulea — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0192.jpg
+- Urocissa sinensis = Urocissa erythrorhyncha — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0200.jpg
+- Urocissa flavirostris — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0208.jpg
+- Cissa pyrrhocyanea = Urocissa ornata — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0220.jpg
+- Euplocamus swinhoii = Lophura swinhoii — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0072.jpg
+- Calophasis ellioti = Syrmaticus ellioti — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0100.jpg
+- Gennaeus nycthemerus = Lophura nycthemera — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0076.jpg
+- Phasianus soemmeringii = Syrmaticus soemmerringii — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0156.jpg
+- Bambusicola hyperythra = Arborophila hyperythra — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIGoul_0292.jpg
+- Bambusicola sonorivox = Bambusicola thoracicus sonorivox — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIGoul_0296.jpg
+- Picus insularis Gould, 1863 = Dendrocopos leucotos insularis. Taiwan. — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIGoul_0072.jpg
+- Pitta bengalensis = Pitta brachyura — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0264.jpg
+- Pitta ellioti = Hydrornis elliotii — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0272.jpg
+- Pitta gurneyi — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0300.jpg
+- Pitta cyanura = Pitta cyanea — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0316.jpg
+- Pitta caerulea = Hydrornis caeruleus — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0332.jpg
+- Pitta boschii = Pitta elegans — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0340.jpg
+- Pitta megarhyncha — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVGoul_0288.jpg
+- Euplocamus lineatus = Lophura leucomelanos oatesi — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0064.jpg
+- Euplocamus vieilloti = Lophura ignita rufa — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0068.jpg
+- Diardigallus praelatus = Lophura diardi — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoVIIGoul_0092.jpg
+- Saxicola maurus indicus, on Juniperus formosana. From The Birds of Asia (John Gould), Volume 4. — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ASaxicola_maurus_indicus_on_Juniperus_formosana_-_Gould.jpg
+- Pucrasia macrolopha (Koklass Pheasant) — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3AKoklassRichter.jpg
+- Tesia castaneocoronata = Cettia castaneocoronata — Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3ABirdsAsiaJohnGoIVGoul_0016.jpg
+
+Images are cropped, colour-graded and animated for this video. (These images are not from the National Museum of Taiwan History, which holds a separate 20-plate set of the same work.)
+
+Music: AI-generated instrumental made with ACE-Step 1.5 (https://github.com/ace-step/ACE-Step-1.5).
+Built with scripts from https://github.com/ChihChengLiang/montage

@@ -38,3 +38,15 @@ beat period 0.800 s (grid fit 75.01 bpm, 21 ms RMS), even though bpm=100 was req
 exactly halfway between beats. The pulse sat ~27 ms (<1 frame) after the cuts, so `align_beats.py` rotates the
 loop circularly by 1296 samples -> `loop_aligned.wav` (still exactly 3686400 samples; the loop stays seamless).
 Run from the repo root with librosa + soundfile installed (e.g. `uv venv && uv pip install librosa soundfile`).
+
+## v4: Gould bird plates loop (gould_loop_aligned.wav/.mp3)
+Scripts (generalised): `gen_gould.py DUR BPM SEED...`, `make_loop_param.py RAW OUT PERIOD BEATS [XFADE_BEATS] [START]`,
+`align_param.py IN OUT GRID_PERIOD`; librosa lives in `ana-venv` (uv venv; `uv pip install librosa soundfile`).
+    cd repo && .venv/bin/python ../gen_gould.py 100 85 11 22     # ~170-210 s each
+    ana-venv/bin/python detect_beats.py out_gould/seed22.wav
+    ana-venv/bin/python make_loop_param.py gould_raw.wav gould_loop.wav 0.7061425 112
+    ana-venv/bin/python align_param.py gould_loop.wav gould_loop_aligned.wav 0.7061425
+Prompt: "gentle airy instrumental, morning garden, natural history, soft acoustic texture, light plucked harp and kalimba, occasional glockenspiel touches, soft warm pads, warm low strings, very sparse minimal melody, steady even unobtrusive energy, no drums, no vocals, no build-up, calm background music bed" (G Major, requested 85 bpm).
+Seeds 11 and 22: both detected ~84.7-85 bpm; seed 22 chosen (2 s RMS CV 0.125 vs 0.314; beat-fit residual rms 13 ms vs 75 ms).
+Detected beat period 0.7061 s (84.97 bpm), eighth 0.3531 s. N=112 beats -> 3796222 samples = 79.088 s.
+Alignment: rolled by 2448 samples (51 ms); eighth-grid offset agreed (48 ms).

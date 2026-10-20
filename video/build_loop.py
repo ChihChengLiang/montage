@@ -27,9 +27,12 @@ def P(x): return x if os.path.isabs(x) else os.path.join(BASE, x)
 IMG, WK, OUT_DIR = P(CFG["images_dir"]), P(CFG["work_dir"]), P(CFG["out_dir"])
 WAV = P(CFG["audio"]) if CFG.get("audio") else None
 W, H, FPS = CFG["width"], CFG["height"], CFG["fps"]
-BEAT = round(FPS * 60 / CFG["bpm"])                       # frames per beat (18 @ 30 fps / 100 bpm)
-TOTAL = CFG["loop_beats"] * BEAT
+BEAT_S = CFG["beat_seconds"] if CFG.get("beat_seconds") else 60 / CFG["bpm"]   # optional exact beat period (non-integer frame grids)
+BEAT = FPS * BEAT_S                                       # frames per beat (18.0 @ 30 fps / 100 bpm; may be fractional)
+TOTAL = round(CFG["loop_beats"] * BEAT)                   # cut boundaries = round(cumulative beats * BEAT)
+if CFG.get("total_frames"): assert TOTAL == CFG["total_frames"], f"loop_beats*beat = {CFG['loop_beats']*BEAT:.3f} frames, expected {CFG['total_frames']}"
 LOOP_SECONDS = TOTAL / FPS
+def fb(beats): return round(beats * BEAT)
 GR, CR, X264 = CFG["grade"], CFG["crop"], CFG["x264"]
 DROP = set(CFG.get("drop", []))
 MANUAL = {k: tuple(v) for k, v in CFG.get("manual_safe_rects", {}).items()}
@@ -79,6 +82,7 @@ def load(file):
     fb = (max(fb[0], sx0), max(fb[1], sy0), min(fb[2], sx1), min(fb[3], sy1))
     ys, xs = np.mgrid[0:gh, 0:gw]; tot = F.sum() + 1e-6
     focal = (float((F * xs).sum() / tot * s), float((F * ys).sum() / tot * s))
+    Fb = cv2.GaussianBlur(F, (0, 0), 3); py, px = np.unravel_index(int(Fb.argmax()), Fb.shape); peak = (float(px * s), float(py * s))
     # white balance from backdrop (low-saliency pixels inside safe rect); object-filling images: gentle gray-world
     mask = np.zeros((gh, gw), bool); mask[int(sy0 / s):int(sy1 / s), int(sx0 / s):int(sx1 / s)] = True
     bgm = mask & (F < 0.05)
@@ -88,7 +92,7 @@ def load(file):
         m = sm[mask].mean(0); gains = 1 + 0.5 * (m.mean() / m - 1)
     gains = np.clip(gains, 0.8, 1.3).astype(np.float32)
     bgl = float((np.median(sm[bgm], 0) * gains * [0.299, 0.587, 0.114]).sum() / 255) if (bgm.sum() > 0.12 * mask.sum() and key not in MANUAL) else None
-    return dict(file=file, key=key, bg=bgl, im=im, w=w, h=h, safe=safe, G=G, F=F, s=s, fb=fb, focal=focal, gains=gains, c=cred[file])
+    return dict(file=file, key=key, bg=bgl, im=im, w=w, h=h, safe=safe, G=G, F=F, s=s, fb=fb, focal=focal, peak=peak, gains=gains, c=cred[file])
 
 def win_score(d, cx, cy, cw, mode):
     s = d["s"]; ch = cw * 9 / 16
@@ -114,7 +118,10 @@ def plan(d, roles):
     for role in roles:
         if role == "hero":
             cw = max(CR["hero_min_frac"] * d["w"], (fb[2]-fb[0]) * 1.2, (fb[3]-fb[1]) * 16/9 * 1.2)
+            if CR.get("hero_max_frac"): cw = min(cw, CR["hero_max_frac"] * d["w"])       # optional cap (illustrations: tighter hero)
             cw = min(cw, x1 - x0, (y1 - y0) * 16 / 9)
+            if CR.get("hero_center") == "focal": fcx, fcy = fx, fy
+            elif CR.get("hero_center") == "peak": fcx, fcy = d["peak"]; tx, ty = d["peak"]                        # optional: centre on the saliency centroid, not the bbox
             cx, cy = fcx + 0.06 * cw, fcy                      # slightly off-centre (thirds-ish), push toward the focal point
             tx, ty = fx, fy
         elif role == "wide":
@@ -153,7 +160,16 @@ assert tot == CFG["loop_beats"], f"shot_cycle_beats {cyc} cannot fill {CFG['loop
 need = len(pattern) - 1
 assert len(shots) >= need, f"{len(shots)} crops available, {need} needed: add images or roles"
 while len(shots) > need:                                  # trim extra crops, 'wide' ones first
-    j = next((k for k in range(len(shots)-1, -1, -1) if shots[k][1]["role"] == "wide"), len(shots) - 1); shots.pop(j)
+    j = next((k for k in range(len(shots)-1, -1, -1) if shots[k][1]["role"] == "wide"), None)
+    if j is None: break
+    shots.pop(j)
+for role in ("texture", "detail"):                        # then drop evenly spaced texture, then detail crops
+    ex = len(shots) - need
+    if ex <= 0: break
+    idx = [k for k, (_, p_) in enumerate(shots) if p_["role"] == role]
+    drop = {idx[int((m + 0.5) * len(idx) / min(ex, len(idx)))] for m in range(min(ex, len(idx)))}
+    shots = [x for k, x in enumerate(shots) if k not in drop]
+while len(shots) > need: shots.pop()
 shots.append(shots[0])
 assert len(pattern) == len(shots) and sum(pattern) == CFG["loop_beats"]
 
@@ -174,10 +190,23 @@ if "--check" in flags:
     else:
         dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", WAV], capture_output=True, text=True).stdout)
         if abs(dur - LOOP_SECONDS) > 1 / FPS: bad(f"audio is {dur:.3f}s, video loop is {LOOP_SECONDS:.3f}s")
-    t = 0
+    t = 0; cb = 0
     for i, ((d, p), b) in enumerate(zip(shots, pattern)):
-        print(f"shot {i:2d}  {d['key']}  {p['role']:7s} {b} beats  {b*BEAT} frames  t={t/FPS:6.2f}s  crop {int(p['cw'])}px of {d['w']}x{d['h']}"); t += b * BEAT
-    print(f"images {len(files)}  shots {len(shots)}  frames {t} ({t/FPS:.3f}s)  beat={BEAT}f  {'OK' if ok and t == TOTAL else 'CHECK FAILED'}")
+        print(f"shot {i:2d}  {d['key']}  {p['role']:7s} {b} beats  {fb(cb+b)-fb(cb)} frames  t={t/FPS:6.2f}s  crop {int(p['cw'])}px of {d['w']}x{d['h']}"); t += fb(cb+b) - fb(cb); cb += b
+    if "--preview" in flags:                              # draw planned crops + safe rects on each image -> work/plan_preview.jpg
+        ims = []
+        for d in imgs:
+            tt = d["im"].copy(); sc = 480 / max(tt.size); tt = tt.resize((int(tt.size[0]*sc), int(tt.size[1]*sc))); dr = ImageDraw.Draw(tt)
+            dr.rectangle([v * sc for v in d["safe"]], outline=(0, 160, 255), width=2)
+            for dd, p in shots[:-1]:
+                if dd is d:
+                    ch = p["cw"] * 9 / 16; col = {"hero": (255, 0, 0), "detail": (0, 200, 0), "texture": (255, 160, 0), "wide": (160, 0, 200)}[p["role"]]
+                    dr.rectangle([(p["cx"]-p["cw"]/2)*sc, (p["cy"]-ch/2)*sc, (p["cx"]+p["cw"]/2)*sc, (p["cy"]+ch/2)*sc], outline=col, width=3)
+            ims.append(tt)
+        cols_ = 6; rows_ = (len(ims) + cols_ - 1) // cols_; Sx = Image.new("RGB", (cols_ * 490, rows_ * 490), "white")
+        for i_, tt in enumerate(ims): Sx.paste(tt, ((i_ % cols_) * 490, (i_ // cols_) * 490))
+        Sx.save(f"{WK}/plan_preview.jpg", quality=80); print("wrote", f"{WK}/plan_preview.jpg")
+    print(f"images {len(files)}  shots {len(shots)}  frames {t} ({t/FPS:.3f}s)  beat={BEAT:g}f  {'OK' if ok and t == TOTAL else 'CHECK FAILED'}")
     sys.exit(0 if ok and t == TOTAL else 1)
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -205,9 +234,9 @@ def grade(a, gain, expo):
 inter = f"{WK}/inter.mp4"
 enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
     "-c:v", "libx264", "-crf", str(X264["intermediate_crf"]), "-preset", "veryfast", "-pix_fmt", "yuv420p", inter], stdin=subprocess.PIPE)
-prev = None; n = 0; meta = []
+prev = None; n = 0; meta = []; cbeat = 0
 for si, ((d, p), beats) in enumerate(zip(shots, pattern)):
-    nf = beats * BEAT; last = si == len(shots) - 1; im = d["im"]
+    nf = fb(cbeat + beats) - fb(cbeat); cbeat += beats; last = si == len(shots) - 1; im = d["im"]
     cw0, ch0 = p["cw"], p["cw"] * 9 / 16
     # exposure normalise per shot from first-frame crop
     t = im.crop((p["cx"]-cw0/2, p["cy"]-ch0/2, p["cx"]+cw0/2, p["cy"]+ch0/2)).resize((192, 108))
@@ -263,4 +292,4 @@ DS = CFG["description"]; L = []
 for line in DS["lines"]:
     if line == "{credits}": L += [DS["credit_line"].format(**c) for c in seen.values()]
     else: L.append(line)
-open(f"{OUT_DIR}/description.txt", "w").write("\n".join(L) + "\n")
+open(f"{OUT_DIR}/{CFG.get('description_file', 'description.txt')}", "w").write("\n".join(L) + "\n")

@@ -17,6 +17,10 @@ macOS + Apple Silicon only (Vision framework for analysis, ACE-Step via MLX).
 1. **Source images and verify licences per item.** Check each item's own licence badge (a collection-level
    statement is not enough). Prefer CC0/public domain. Only use full-resolution variants: crops need >= ~1400 px of
    source width, so 640 px previews are unusable for full-frame shots (that is why CC BY previews were dropped here).
+   If the museum's own copies have no verified licence or are too small, use public-domain scans of the same
+   work from Wikimedia Commons (MediaWiki API with a polite User-Agent and delay; read the licence template on each
+   file page; Commons scans of pre-1900 plates are PD-art-100). Record `image_url` in credits.json and keep the
+   big scans out of git; `scripts/fetch_images.py credits.json` re-downloads them.
    Download into `images/`, write `images/credits.json` (fields: `file`, `title`, `accession_no`, `license`,
    `source_page`) and `images/CREDITS.md`. Ask before bulk-downloading from a new site.
 2. **Create `montage.json`** (copy and edit). Set `images_dir`, `image_glob`, `license_filter`, `drop`.
@@ -56,6 +60,21 @@ macOS + Apple Silicon only (Vision framework for analysis, ACE-Step via MLX).
 - The encode (2-pass x264 + grain) is not bit-reproducible; compare by PSNR/SSIM, not by hash.
 - Disk: a fresh ACE-Step setup needs ~11 GB, an uncapped near-lossless render 770 MB. `uv cache clean` freed 26 GB once.
 - Clean up: don't leave multi-hundred-MB intermediates in `video/work/`.
+
+## Variants and gotchas from the second set (Gould bird plates, `gould.json`)
+
+- **Frame-exact loop with an awkward tempo:** loop length must be a whole number of frames. At 84.97 bpm, 112 beats
+  = 2372.64 frames. Use `beat_seconds` for a non-integer grid (cuts rounded to the nearest frame) and set
+  `total_frames`; then make the audio exactly `total_frames/fps` seconds with a tiny *circular* stretch
+  (`music/fit_loop.py`, periodic cubic spline, ~0.015%) instead of trimming, which would break the seam.
+- **Plates are illustrations, not studio objects:** use a light paper-toned grade that keeps plumage colours true
+  (no warm-wood tint), meter exposure on the bird, and give every plate a hand-set `manual_safe_rects` inside the
+  printed area so crops avoid captions, plate edges and the book binding. `build_loop.py --preview` writes a
+  crop-plan image to check this before rendering; `crop.hero_center: "peak"` puts hero crops on the saliency peak
+  (usually the head), `crop.hero_max_frac` caps their size.
+- **Music tempo:** requesting 85 bpm gave 84.97 this time (100 gave 75 before): always detect. Generate two seeds
+  and pick the one with the lower RMS variation and beat-fit residual (seed 22: CV 0.125, 13 ms vs 0.314, 75 ms).
+- Separate project = separate config: `images_dir`, `work_dir`, `out_name`, `description_file`, `audio`.
 
 ## Not parameterised (edit code if needed)
 
