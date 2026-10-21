@@ -83,6 +83,15 @@ macOS + Apple Silicon only (Vision framework for analysis, ACE-Step via MLX).
   and pick the one with the lower RMS variation and beat-fit residual (seed 22: CV 0.125, 13 ms vs 0.314, 75 ms).
 - Separate project = separate config: `images_dir`, `work_dir`, `out_name`, `description_file`, `audio`.
 
+## Variant: short fast-cut opener (eye-lock, `eyelock.json`)
+
+Hand-label the lock target per image (here bird eyes in `images_gould/eyes.json`: centre, diameter, facing) and verify
+on an overlay sheet; no detector exists. Scale each shot so the target has the same output size, flip so everything
+faces the same way, and skip targets that need >2x upscaling or whose frame leaves the plate's safe rect. Use hard cuts
+on an accelerating sub-beat grid; a 5 s clip at 144 bpm is exactly 12 beats. Sound that needs an exact structure
+and hit time (sting) is better synthesized than generated (ACE-Step ignores structure). Beat detectors read 6-10 ms
+late; don't treat that as misalignment. Limit flashes (single frames, not more than one per beat).
+
 ## Not parameterised (edit code if needed)
 
 16:9 crop aspect, saliency/gradient scoring weights, focal drift factor, safe-region margins, white-balance and

@@ -22,7 +22,7 @@ def frames(sel, cnt):
     b = subprocess.run(["ffmpeg", "-v", "error", "-i", f, "-vf", f"select='{sel}'", "-vsync", "0", "-frames:v", str(cnt), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
     return list(np.frombuffer(b, np.uint8).reshape(-1, h, w, 3).astype(np.float32))
 tail = frames(f"gte(n,{n-4})", 4); head = frames("lt(n,4)", 4)
-mid = frames("between(n,1000,1003)", 4)
+mid = frames(f"between(n,{n//2},{n//2+3})", 4)
 mae = lambda a, b: float(np.abs(a - b).mean())
 seam = mae(tail[-1], head[0])
 before = [mae(tail[i], tail[i + 1]) for i in range(3)]; after = [mae(head[i], head[i + 1]) for i in range(3)]

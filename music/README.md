@@ -68,3 +68,12 @@ log-RMS and onset density, each divided by the median distance between adjacent 
   (seed 33 scored 0.35 but with a worse beat fit; old loop 1.34). Output loop_seam.wav/.mp3, exactly 3,686,400 samples = 76.8 s.
   `seam_check.py LOOP P` prints join step and per-beat RMS around the join of the tiled loop.
 Caveat: all numbers are signal statistics; nobody has listened.
+
+## v6: 5 s opener sting (eyelock_sting.wav/.mp3, sting_info.json)
+Synthesised, not ACE-Step: `ana-venv/bin/python make_sting.py` (numpy/scipy, deterministic seed). Exactly 240000 samples = 12 beats x 20000 samples
+at 144 bpm (beat 0.416667 s), first beat at t=0, 48 kHz stereo 16-bit, peak -1 dBFS, 1 ms fade-in / 5 ms fade-out.
+Layers: synth taiko (pitch-dropping sine + skin-slap noise) quarters -> 8ths (beats 4-7) -> 16ths (8-10) -> 32nd roll (beat 11);
+accelerating ticks (8ths -> 16ths -> 32nds, rising gain, alternating pan); D1 sub drone pumping with the beat and rising;
+band-pass noise riser sweeping 300 Hz -> 12 kHz over beats 10 to 11.75; sub-boom + noise + taiko IMPACT at 11.75 beats (t=4.8958 s),
+tail cut at 5.000 s. RMS per beat rises 0.174 -> 0.487 (monotonic). Onset-detector check: grid offset ~6 ms (detector latency; kick starts at sample 0).
+Why not ACE-Step: needs a deterministic 144 bpm grid, structure (build + hit at a fixed time) the model does not obey, and a hard stop; not tried. Not listened to.

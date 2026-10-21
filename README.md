@@ -91,6 +91,20 @@ boundaries rounded to the nearest frame). The music loop is time-stretched by 0.
 exactly 2373 frames long; the stretch is circular, so the loop stays seamless. NMTH holds a 20-plate Gould set but
 its images carry no verified licence and are 640 px, so none are used.
 
+## Experiment: 5-second eye-lock opener
+
+`eyelock.json` + `video/eyelock.py` build a 5 s, 150-frame fast-cut opener from the Gould plates: every cut is a
+different bird, but each bird's eye sits at the same screen position and size (40% / 50%, 100 px iris) and all birds
+face right (flipped where needed). Cuts accelerate over 12 beats at 144 bpm (1, 2, then 4 cuts per beat) into a macro
+hold on one eye, with a small zoom kick per cut and single flash frames on strong beats. Eye positions are labelled
+by hand in `images_gould/eyes.json` (there is no bird-eye detector; verified on an overlay sheet). Music is a
+5.000 s synthesized sting (`music/make_sting.py`, deterministic numpy/scipy, impact at 4.896 s).
+
+```bash
+python3 video/eyelock.py --check        # prints the cut plan
+python3 video/eyelock.py                # -> video/eyelock.mp4 (needs images_gould/*.jpg, see scripts/fetch_images.py)
+```
+
 ## Caveats
 
 - Nobody has listened to the generated music in the build process; check the loop point and the tempo by ear.

@@ -1,0 +1,71 @@
+{
+ "images_dir": "images_gould",
+ "eyes_file": "images_gould/eyes.json",
+ "safe_rects_from": "gould.json",
+ "width": 1920,
+ "height": 1080,
+ "fps": 30,
+ "duration_beats": 12,
+ "beat_seconds": 0.4166667,
+ "first_beat_offset": 0.0,
+ "plan": [
+  [
+   0,
+   1
+  ],
+  [
+   4,
+   2
+  ],
+  [
+   8,
+   4
+  ]
+ ],
+ "hold": {
+  "start_beat": 11,
+  "eye": "g03a",
+  "scale": 3.0,
+  "push_in": 0.06
+ },
+ "lock": {
+  "x": 0.4,
+  "y": 0.5,
+  "eye_d": 100,
+  "max_scale": 2.0,
+  "facing": "right"
+ },
+ "punch": {
+  "frames": 3,
+  "amount": 0.07
+ },
+ "flash": {
+  "beats": [
+   4,
+   8,
+   11
+  ],
+  "frames": 1,
+  "amount": 0.5,
+  "color": [
+   255,
+   255,
+   255
+  ]
+ },
+ "grade": {
+  "contrast": 1.15,
+  "saturation": 1.1,
+  "vignette": 0.45,
+  "vignette_start": 0.3,
+  "target_luma": 0.55,
+  "grain": 0.003
+ },
+ "audio": "music/eyelock_sting.wav",
+ "sting_info": "music/sting_info.json",
+ "out_dir": "video",
+ "work_dir": "video/work_eye",
+ "out_name": "eyelock",
+ "crf": 20,
+ "seed": 5
+}

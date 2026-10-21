@@ -1,0 +1,702 @@
+[
+ {
+  "plate": "g01",
+  "bird": "g01a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   1956.0,
+   964.3
+  ],
+  "eye_d": 86.0,
+  "pupil_d": 43.1,
+  "plate_size": [
+   5043,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g01",
+  "bird": "g01b",
+  "facing": "right",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g01",
+  "bird": "g01c",
+  "facing": "right",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g01",
+  "bird": "g01d",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g02",
+  "bird": "g02a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   1329,
+   5219
+  ],
+  "eye_d": 120,
+  "pupil_d": 143.2,
+  "plate_size": [
+   5043,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g02",
+  "bird": "g02b",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g02",
+  "bird": "g02c",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g03",
+  "bird": "g03a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   1343,
+   4607
+  ],
+  "eye_d": 121,
+  "pupil_d": 154.8,
+  "plate_size": [
+   5043,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g03",
+  "bird": "g03b",
+  "facing": "right",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g04",
+  "bird": "g04a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   1402.0,
+   1930.0
+  ],
+  "eye_d": 126.0,
+  "pupil_d": 72.0,
+  "plate_size": [
+   5080,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g05",
+  "bird": "g05a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   1329.4,
+   5122.3
+  ],
+  "eye_d": 122.0,
+  "pupil_d": 48.7,
+  "plate_size": [
+   4627,
+   6956
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g05",
+  "bird": "g05b",
+  "facing": "right",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g05",
+  "bird": "g05c",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g06",
+  "bird": "g06a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   658.7,
+   841.5
+  ],
+  "eye_d": 110.0,
+  "pupil_d": 79.8,
+  "plate_size": [
+   6944,
+   4435
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g06",
+  "bird": "g06b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   3626.6,
+   759.8
+  ],
+  "eye_d": 76.0,
+  "pupil_d": 35.7,
+  "plate_size": [
+   6944,
+   4435
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g07",
+  "bird": "g07a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   906,
+   3844
+  ],
+  "eye_d": 127,
+  "pupil_d": 155.1,
+  "plate_size": [
+   4594,
+   6978
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g07",
+  "bird": "g07b",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   1790.2,
+   1980.6
+  ],
+  "eye_d": 54.0,
+  "pupil_d": 30.2,
+  "plate_size": [
+   4594,
+   6978
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g08",
+  "bird": "g08a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   4657.2,
+   3573.5
+  ],
+  "eye_d": 90.0,
+  "pupil_d": 67.0,
+  "plate_size": [
+   6992,
+   4620
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g08",
+  "bird": "g08b",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   5163.6,
+   2304.2
+  ],
+  "eye_d": 94.0,
+  "pupil_d": 68.0,
+  "plate_size": [
+   6992,
+   4620
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g09",
+  "bird": "g09a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   3519.5,
+   1097.7
+  ],
+  "eye_d": 92.0,
+  "pupil_d": 38.7,
+  "plate_size": [
+   7040,
+   4582
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g09",
+  "bird": "g09b",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   2921.7,
+   2390.5
+  ],
+  "eye_d": 82.0,
+  "pupil_d": 35.3,
+  "plate_size": [
+   7040,
+   4582
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g10",
+  "bird": "g10a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   2721.9,
+   1575.7
+  ],
+  "eye_d": 98.0,
+  "pupil_d": 59.5,
+  "plate_size": [
+   7040,
+   4582
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g10",
+  "bird": "g10b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   3635.9,
+   1597.5
+  ],
+  "eye_d": 108.0,
+  "pupil_d": 80.9,
+  "plate_size": [
+   7040,
+   4582
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g11",
+  "bird": "g11a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   2542.2,
+   1332.4
+  ],
+  "eye_d": 82.0,
+  "pupil_d": 39.4,
+  "plate_size": [
+   4361,
+   6937
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g11",
+  "bird": "g11b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2205.7,
+   3272.2
+  ],
+  "eye_d": 88.0,
+  "pupil_d": 44.8,
+  "plate_size": [
+   4361,
+   6937
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g12",
+  "bird": "g12a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   1871,
+   2005
+  ],
+  "eye_d": 125,
+  "pupil_d": 135.5,
+  "plate_size": [
+   5107,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g12",
+  "bird": "g12b",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   4164.1,
+   4489.8
+  ],
+  "eye_d": 98.0,
+  "pupil_d": 68.2,
+  "plate_size": [
+   5107,
+   7257
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g13",
+  "bird": "g13a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   2513,
+   1468
+  ],
+  "eye_d": 121,
+  "pupil_d": 67.2,
+  "plate_size": [
+   5107,
+   7294
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g13",
+  "bird": "g13b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2893.0,
+   2791.7
+  ],
+  "eye_d": 108.0,
+  "pupil_d": 38.1,
+  "plate_size": [
+   5107,
+   7294
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g14",
+  "bird": "g14a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   3537.9,
+   1949.4
+  ],
+  "eye_d": 72.0,
+  "pupil_d": 25.6,
+  "plate_size": [
+   5126,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g14",
+  "bird": "g14b",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g14",
+  "bird": "g14c",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye hidden/hooded/tiny/ambiguous"
+ },
+ {
+  "plate": "g15",
+  "bird": "g15a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2116,
+   1677
+  ],
+  "eye_d": 95,
+  "pupil_d": 132.6,
+  "plate_size": [
+   5089,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g15",
+  "bird": "g15b",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g16",
+  "bird": "g16a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   3902.5,
+   1215.4
+  ],
+  "eye_d": 112.0,
+  "pupil_d": 45.8,
+  "plate_size": [
+   7328,
+   5082
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g16",
+  "bird": "g16b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2066.9,
+   2753.4
+  ],
+  "eye_d": 118.0,
+  "pupil_d": 49.9,
+  "plate_size": [
+   7328,
+   5082
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g17",
+  "bird": "g17a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   3473.3,
+   1612.3
+  ],
+  "eye_d": 112.0,
+  "pupil_d": 36.5,
+  "plate_size": [
+   5091,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g17",
+  "bird": "g17b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2292,
+   3039
+  ],
+  "eye_d": 92,
+  "pupil_d": 129.7,
+  "plate_size": [
+   5091,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g18",
+  "bird": "g18a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2424.9,
+   1859.6
+  ],
+  "eye_d": 102.0,
+  "pupil_d": 39.3,
+  "plate_size": [
+   5089,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g18",
+  "bird": "g18b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2271.2,
+   3027.2
+  ],
+  "eye_d": 86.0,
+  "pupil_d": 46.8,
+  "plate_size": [
+   5089,
+   7331
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g19",
+  "bird": "g19a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   803,
+   2147
+  ],
+  "eye_d": 110,
+  "pupil_d": 33.1,
+  "plate_size": [
+   6944,
+   4562
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; 8 eyes hand-measured on a pixel grid"
+ },
+ {
+  "plate": "g19",
+  "bird": "g19b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   2296.3,
+   604.5
+  ],
+  "eye_d": 72.0,
+  "pupil_d": 41.5,
+  "plate_size": [
+   6944,
+   4562
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g20",
+  "bird": "g20a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   3358.1,
+   741.0
+  ],
+  "eye_d": 103.0,
+  "pupil_d": 38.8,
+  "plate_size": [
+   6944,
+   4552
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil; red iris incl. ring measured by hand"
+ },
+ {
+  "plate": "g21",
+  "bird": "g21a",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   835.4,
+   983.3
+  ],
+  "eye_d": 94.0,
+  "pupil_d": 70.7,
+  "plate_size": [
+   6912,
+   4445
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g22",
+  "bird": "g22a",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g22",
+  "bird": "g22b",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g23",
+  "bird": "g23a",
+  "facing": "right",
+  "status": "ok",
+  "eye_xy": [
+   6146.7,
+   2475.4
+  ],
+  "eye_d": 92.0,
+  "pupil_d": 35.9,
+  "plate_size": [
+   6994,
+   4518
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g23",
+  "bird": "g23b",
+  "facing": "left",
+  "status": "ok",
+  "eye_xy": [
+   1368.2,
+   2402.9
+  ],
+  "eye_d": 74.0,
+  "pupil_d": 36.0,
+  "plate_size": [
+   6994,
+   4518
+  ],
+  "note": "eye_d = iris(+ring) diameter in source px; centre refined on the pupil"
+ },
+ {
+  "plate": "g24",
+  "bird": "g24a",
+  "facing": "right",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ },
+ {
+  "plate": "g24",
+  "bird": "g24b",
+  "facing": "left",
+  "status": "skipped",
+  "note": "eye tiny or hidden (small background bird / foreshortened)"
+ }
+]
