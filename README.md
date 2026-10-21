@@ -22,9 +22,10 @@ dropped). `credits.json` / `CREDITS.md` record title, registration number, licen
   and text boxes). Crop windows are kept clear of registration numbers, rulers and label strips.
 - One shared grade: per-image white balance, then warm amber highlights, brown lifted blacks, desaturated cool
   colours, subtle vignette and light grain.
-- Cuts every 2 or 4 beats (1.2 s / 2.4 s) as hard cuts, with a 4% push-in toward the focal target. The last shot
-  is the first one played in reverse, so the last frame lands on frame 0 and the video loops seamlessly.
-  Exactly 2304 frames at 30 fps.
+- Cuts every 2 or 4 beats (1.2 s / 2.4 s) as hard cuts, with a 4% push-in toward the focal target. Loop closure: the first shot has
+  a hidden pre-roll (its push-in continues backwards in time), and the last `seam_dissolve_beats` (1 beat) of the loop are a
+  smoothstep cross-dissolve from the last shot into that pre-roll, so the last frame flows into frame 0 with
+  continuous forward motion (no reversal). Exactly 2304 frames at 30 fps.
 
 **Music** (`music/`): ACE-Step 1.5 turbo DiT (MLX backend), instrumental, about 100 s generated, then cut to
 exactly 76.8 s with the tail crossfaded onto the head (seamless audio loop). Beat tracking with librosa showed the
@@ -45,8 +46,9 @@ Optional: `python3 video/build_loop.py --check` validates inputs (images, analys
 the shot plan without rendering; `python3 video/qc.py` prints duration, frame count, luma stats and the loop-seam
 difference of the rendered file.
 
-Music: see `music/README.md` (ACE-Step setup + generation, ~10 GB of weights), then `python3 music/align_beats.py`
-writes `music/loop_aligned.wav`. That file is committed, so the two commands above reproduce the video without
+Music: see `music/README.md` (ACE-Step setup + generation, ~10 GB of weights; `music/find_loop.py` picks a smooth
+loop point from the middle of a generation). The final loops `music/loop_seam.wav` (wood) and
+`music/gould_loop_seam_fit.wav` (Gould) are committed, so the commands above reproduce the videos without
 installing ACE-Step.
 
 ### Reusing the pipeline for other images
@@ -60,7 +62,7 @@ argument to any command, e.g. `python3 video/build_loop.py other.json`):
 | `credits_file`, `license_filter` | JSON list with `file`, `title`, `accession_no`, `license`, `source_page` per image; only entries whose license starts with the filter are used |
 | `manual_safe_rects` | `{key: [x0,y0,x1,y1]}` fractions, for images whose subject fills the frame (keeps crops off edges/labels) |
 | `width`, `height`, `fps`, `bpm`, `loop_beats` | output format and the cut grid; loop length = `loop_beats * 60 / bpm` s |
-| `shot_cycle_beats`, `dissolve`, `push_in` | shot-length cycle (must fill `loop_beats` exactly), short dissolve on long shots, push-in amount |
+| `shot_cycle_beats`, `dissolve`, `push_in`, `seam_dissolve_beats` | shot-length cycle (must fill `loop_beats` exactly; every slot needs its own crop), short dissolve on long shots, push-in amount, length of the loop-closing dissolve |
 | `crop` | `min_width` (source px), crop sizes, `roles` per image and `extra_roles` per image key |
 | `grade` | warm tint, black lift, gamma, saturation, vignette, grain, highlight knee, exposure targets |
 | `x264`, `audio`, `out_dir`, `work_dir`, `out_name`, `seed` | encode targets (2-pass bitrate), audio file to mux, output locations, grain seed |

@@ -31,6 +31,13 @@ macOS + Apple Silicon only (Vision framework for analysis, ACE-Step via MLX).
 5. **Music** (see `music/README.md`; weights ~10 GB, check free disk first, `df -h`):
    - Generate ~100 s with `music/gen_loop.py`, cut to the exact loop length with a 2-beat equal-power crossfade
      of the tail onto the head (`music/make_loop.py`). Loop length = `loop_beats * 60 / bpm` seconds.
+   - **Pick the loop point from the MIDDLE of the generation, not the start.** Raw t=0 is the model's intro and the last
+     ~5-15 s are its ending, so a loop cut from the start has an audible join (loud intro after a quiet decay, harmony that
+     does not lead back). Detect the beat grid first, then run `music/find_loop.py RAW P T0 L_BEATS OUT --step 1 --max-end 94`:
+     it tries every beat-aligned start, builds each loop with the 2-beat crossfade and scores the join (chroma, mel, centroid,
+     RMS, onset density across 2-bar windows, normalised by typical adjacent-window distances; aim for < ~0.6, 1.0 = neighbouring
+     music). If the best is > ~1.2 the raw cannot loop: regenerate 2-3 seeds with a loop-friendly prompt (static modal harmony,
+     ostinato, no intro/ending/fade, ~110 s, `music/gen_seed.py`) and search those. Use `music/seam_check.py` to confirm.
    - **Do not trust the requested bpm.** ACE-Step ignored `bpm=100` and produced 75 bpm. Run
      `music/detect_beats.py` (librosa) to get the real tempo, then `music/align_beats.py` to rotate the loop so
      the pulse lands on frame 0 (circular shift keeps the loop seamless). Use the aligned file as `audio`.
@@ -55,7 +62,7 @@ macOS + Apple Silicon only (Vision framework for analysis, ACE-Step via MLX).
   image, then apply one shared grade.
 - **Crop to fill 16:9**, never letterbox, for a vibe layer. Roles: hero (around the focal point), detail, texture.
 - **Keep crops away from detected text** and the bottom ruler/label band (macOS Vision text boxes + margin).
-- Loop closure: last shot is the first crop reversed, so the last frame lands on frame 0.
+- Loop closure: do NOT play the first shot in reverse (ping-pong: motion reverses at the seam, the first shot shows twice). The first shot gets a hidden pre-roll and the last `seam_dissolve_beats` cross-dissolve into it, so frame N-1 flows into frame 0 with forward motion. Every shot slot needs its own crop. Check `qc.py`'s seam line (seam step about equal to the neighbouring steps) and, more importantly, choose audio loop points from the middle of a raw generation (see music/README.md); an audible seam is usually the audio.
 - `build_loop.py` regenerates `video/description.txt`; edit the description in `montage.json`, never the output file.
 - The encode (2-pass x264 + grain) is not bit-reproducible; compare by PSNR/SSIM, not by hash.
 - Disk: a fresh ACE-Step setup needs ~11 GB, an uncapped near-lossless render 770 MB. `uv cache clean` freed 26 GB once.

@@ -18,8 +18,14 @@ for i in range(5):
     st = {l.split("=")[0].split(".")[-1]: l.split("=")[1] for l in o.splitlines() if "YAVG" in l or "YHIGH" in l or "YMAX" in l}
     print(f"  t={t:6.2f}s  YAVG {float(st['YAVG']):6.1f}  YHIGH {st['YHIGH']:>4}  YMAX {st['YMAX']:>4}")
 w, h = int(v["width"]), int(v["height"])
-def frame(sel):
-    b = subprocess.run(["ffmpeg", "-v", "error", "-i", f, "-vf", f"select='{sel}'", "-vsync", "0", "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
-    return np.frombuffer(b, np.uint8).reshape(h, w, 3).astype(np.float32)
-f0, f1, fl = frame("eq(n,0)"), frame("eq(n,1)"), frame(f"eq(n,{n-1})")
-print(f"  loop seam: |last - first| MAE {np.abs(fl - f0).mean():.2f}   (normal consecutive-frame MAE: {np.abs(f1 - f0).mean():.2f})")
+def frames(sel, cnt):
+    b = subprocess.run(["ffmpeg", "-v", "error", "-i", f, "-vf", f"select='{sel}'", "-vsync", "0", "-frames:v", str(cnt), "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], capture_output=True).stdout
+    return list(np.frombuffer(b, np.uint8).reshape(-1, h, w, 3).astype(np.float32))
+tail = frames(f"gte(n,{n-4})", 4); head = frames("lt(n,4)", 4)
+mid = frames("between(n,1000,1003)", 4)
+mae = lambda a, b: float(np.abs(a - b).mean())
+seam = mae(tail[-1], head[0])
+before = [mae(tail[i], tail[i + 1]) for i in range(3)]; after = [mae(head[i], head[i + 1]) for i in range(3)]
+typ = np.mean([mae(mid[i], mid[i + 1]) for i in range(3)])
+print(f"  loop seam: |F[N-1] - F[0]| MAE {seam:.2f}   (steps just before the seam {np.mean(before):.2f}, just after {np.mean(after):.2f}, typical mid-video step {typ:.2f})")
+print(f"  seam is {'continuous' if seam <= 1.5 * max(np.mean(before), np.mean(after), 0.5) else 'ABRUPT'} (seam step {seam/max(np.mean(before),0.01):.2f}x the preceding step)")

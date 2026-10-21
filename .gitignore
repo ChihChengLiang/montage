@@ -25,3 +25,6 @@ music/gould_raw.wav
 music/gould_loop.wav
 music/gould_loop_aligned.wav
 music/gould_loop_aligned.mp3
+music/*.mp3
+music/loop_aligned.wav
+music/gould_loop_fit.wav

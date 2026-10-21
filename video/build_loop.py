@@ -151,13 +151,13 @@ shots = []
 for d, roles in zip(imgs, per):
     for p in plan(d, roles): shots.append((d, p))
 print("images", len(imgs), "crops", len(shots), [(d["key"], sum(1 for x,_ in shots if x is d)) for d in imgs])
-# shot lengths: cycle CFG["shot_cycle_beats"] until loop_beats is filled exactly; last shot = first shot reversed (seamless)
+# shot lengths: cycle CFG["shot_cycle_beats"] until loop_beats is filled exactly; the final seam_dissolve_beats cross-dissolve into a hidden pre-roll of the first shot (seamless, forward motion)
 pattern, tot, i = [], 0, 0
 cyc = CFG["shot_cycle_beats"]
 while tot < CFG["loop_beats"]:
     pattern.append(cyc[i % len(cyc)]); tot += pattern[-1]; i += 1
 assert tot == CFG["loop_beats"], f"shot_cycle_beats {cyc} cannot fill {CFG['loop_beats']} beats exactly (got {tot})"
-need = len(pattern) - 1
+need = len(pattern)
 assert len(shots) >= need, f"{len(shots)} crops available, {need} needed: add images or roles"
 while len(shots) > need:                                  # trim extra crops, 'wide' ones first
     j = next((k for k in range(len(shots)-1, -1, -1) if shots[k][1]["role"] == "wide"), None)
@@ -170,7 +170,6 @@ for role in ("texture", "detail"):                        # then drop evenly spa
     drop = {idx[int((m + 0.5) * len(idx) / min(ex, len(idx)))] for m in range(min(ex, len(idx)))}
     shots = [x for k, x in enumerate(shots) if k not in drop]
 while len(shots) > need: shots.pop()
-shots.append(shots[0])
 assert len(pattern) == len(shots) and sum(pattern) == CFG["loop_beats"]
 
 if "--check" in flags:
@@ -198,7 +197,7 @@ if "--check" in flags:
         for d in imgs:
             tt = d["im"].copy(); sc = 480 / max(tt.size); tt = tt.resize((int(tt.size[0]*sc), int(tt.size[1]*sc))); dr = ImageDraw.Draw(tt)
             dr.rectangle([v * sc for v in d["safe"]], outline=(0, 160, 255), width=2)
-            for dd, p in shots[:-1]:
+            for dd, p in shots:
                 if dd is d:
                     ch = p["cw"] * 9 / 16; col = {"hero": (255, 0, 0), "detail": (0, 200, 0), "texture": (255, 160, 0), "wide": (160, 0, 200)}[p["role"]]
                     dr.rectangle([(p["cx"]-p["cw"]/2)*sc, (p["cy"]-ch/2)*sc, (p["cx"]+p["cw"]/2)*sc, (p["cy"]+ch/2)*sc], outline=col, width=3)
@@ -234,41 +233,53 @@ def grade(a, gain, expo):
 inter = f"{WK}/inter.mp4"
 enc = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
     "-c:v", "libx264", "-crf", str(X264["intermediate_crf"]), "-preset", "veryfast", "-pix_fmt", "yuv420p", inter], stdin=subprocess.PIPE)
-prev = None; n = 0; meta = []; cbeat = 0
-for si, ((d, p), beats) in enumerate(zip(shots, pattern)):
-    nf = fb(cbeat + beats) - fb(cbeat); cbeat += beats; last = si == len(shots) - 1; im = d["im"]
+def shot_expo(d, p):
+    """exposure normalisation for a shot, metered on the object in its first-frame crop"""
     cw0, ch0 = p["cw"], p["cw"] * 9 / 16
-    # exposure normalise per shot from first-frame crop
-    t = im.crop((p["cx"]-cw0/2, p["cy"]-ch0/2, p["cx"]+cw0/2, p["cy"]+ch0/2)).resize((192, 108))
+    t = d["im"].crop((p["cx"]-cw0/2, p["cy"]-ch0/2, p["cx"]+cw0/2, p["cy"]+ch0/2)).resize((192, 108))
     L = (np.asarray(t, np.float32) / 255 * d["gains"] * [0.299, 0.587, 0.114]).sum(2)
     p98 = float(np.percentile(L, 98))
     obj = np.abs(L - d["bg"]) > GR["object_mask_delta"] if d["bg"] is not None else np.ones_like(L, bool)   # object mask = not-backdrop
     if obj.mean() > 0.05:
         ml = float(L[obj].mean()); expo = (GR["object_target"] / max(ml, 0.03)) ** 0.6 if d["bg"] is not None else (GR["fill_target"] / max(ml, 0.03)) ** 0.8
     else: expo = 1.0
-    expo = float(np.clip(expo, GR["expo_min"], GR["expo_max"])); expo = min(expo, GR["p98_cap"] / max(p98, 0.05))   # backdrop stays bright cream, no clipping
+    expo = float(np.clip(expo, GR["expo_min"], GR["expo_max"])); return min(expo, GR["p98_cap"] / max(p98, 0.05))   # backdrop stays bright, no clipping
+
+def shot_frame(d, p, expo, u):
+    """graded frame of a shot at animation progress u (0..1 within the shot; u<0 = pre-roll before the first frame)"""
+    z = 1 - CFG["push_in"] * u                           # push-in
+    k = 0.7 * u                                          # drift toward target as we push in
+    cx = p["cx"] + (p["tx"] - p["cx"]) * k * 0.5; cy = p["cy"] + (p["ty"] - p["cy"]) * k * 0.5
+    cw = p["cw"] * z; cx, cy = clampc(d, cx, cy, cw); ch = cw * 9 / 16
+    fr = np.asarray(d["im"].resize((W, H), Image.BICUBIC, box=(cx-cw/2, cy-ch/2, cx+cw/2, cy+ch/2)), dtype=np.float32)
+    return grade(fr, d["gains"], expo)
+
+SEAM = max(1, round(CFG.get("seam_dissolve_beats", 1) * BEAT))                    # frames of loop-closing cross-dissolve
+d0, p0 = shots[0]; expo0 = shot_expo(d0, p0); nf0 = fb(pattern[0]) - fb(0)
+prev = None; n = 0; meta = []; cbeat = 0
+for si, ((d, p), beats) in enumerate(zip(shots, pattern)):
+    nf = fb(cbeat + beats) - fb(cbeat); cbeat += beats; last = si == len(shots) - 1
+    expo = expo0 if si == 0 else shot_expo(d, p)
+    assert not last or nf > SEAM, "last shot shorter than the seam dissolve"
     for f in range(nf):
-        u = f / (nf - 1); u = (1 - u) if last else u
-        z = 1 - CFG["push_in"] * u
-        k = 0.7 * u                                      # drift toward target as we push in
-        cx = p["cx"] + (p["tx"] - p["cx"]) * k * 0.5; cy = p["cy"] + (p["ty"] - p["cy"]) * k * 0.5
-        cw = cw0 * z; cx, cy = clampc(d, cx, cy, cw)
-        ch = cw * 9 / 16
-        fr = np.asarray(im.resize((W, H), Image.BICUBIC, box=(cx-cw/2, cy-ch/2, cx+cw/2, cy+ch/2)), dtype=np.float32)
-        out = grade(fr, d["gains"], expo)
+        out = shot_frame(d, p, expo, f / (nf - 1))
         if beats >= CFG["dissolve"]["min_beats"] and f < CFG["dissolve"]["frames"] and prev is not None:
             al = (f + 1) / (CFG["dissolve"]["frames"] + 1); out = (prev.astype(np.float32) * (1 - al) + out * al).astype(np.uint8)
+        if last and f >= nf - SEAM:                      # blend into the first shot's pre-roll: frame N-1 -> frame 0 continues forward
+            j = f - (nf - SEAM); w = (j + 1) / SEAM; w = w * w * (3 - 2 * w)
+            pre = shot_frame(d0, p0, expo0, (j - SEAM) / (nf0 - 1))
+            out = (out.astype(np.float32) * (1 - w) + pre.astype(np.float32) * w + 0.5).astype(np.uint8)
         enc.stdin.write(out.tobytes()); n += 1
-        if f == nf // 2 and not last: Image.fromarray(out).save(f"{WK}/mid/{si:02d}.jpg", quality=88)
+        if f == nf // 2: Image.fromarray(out).save(f"{WK}/mid/{si:02d}.jpg", quality=88)
         if f == nf - 1: prev = out
     meta.append((si, d["c"]["accession_no"], p["role"], beats))
     print("shot", si, d["key"], p["role"], beats, flush=True)
 enc.stdin.close(); enc.wait(); assert n == TOTAL, n
 
 # contact sheet
-cols = 6; tw, th = 320, 180; rows = (len(shots) - 1 + cols - 1) // cols
+cols = 6; tw, th = 320, 180; rows = (len(shots) + cols - 1) // cols
 S = Image.new("RGB", (cols * tw, rows * (th + 14)), "white"); dr = ImageDraw.Draw(S)
-for si, acc, role, b in meta[:-1]:
+for si, acc, role, b in meta:
     x, y = (si % cols) * tw, (si // cols) * (th + 14)
     S.paste(Image.open(f"{WK}/mid/{si:02d}.jpg").resize((tw, th)), (x, y)); dr.text((x + 2, y + th + 1), f"{si} {acc} {role} {b}b", fill="black")
 S.save(f"{WK}/contact.jpg", quality=85)

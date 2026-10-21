@@ -213,7 +213,7 @@
   "bufsize": "16000k",
   "audio_bitrate": "192k"
  },
- "audio": "music/gould_loop_fit.wav",
+ "audio": "music/gould_loop_seam_fit.wav",
  "out_dir": "video",
  "work_dir": "video/work_gould",
  "out_name": "gould_loop",
@@ -235,5 +235,6 @@
  "beat_seconds": 0.70625,
  "total_frames": 2373,
  "description_file": "gould_description.txt",
- "bpm": 84.97
+ "bpm": 84.97,
+ "seam_dissolve_beats": 1
 }

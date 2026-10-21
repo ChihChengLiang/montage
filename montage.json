@@ -57,6 +57,9 @@
    ],
    "c12": [
     "wide"
+   ],
+   "c10": [
+    "wide"
    ]
   }
  },
@@ -94,7 +97,7 @@
   "bufsize": "16000k",
   "audio_bitrate": "192k"
  },
- "audio": "music/loop_aligned.wav",
+ "audio": "music/loop_seam.wav",
  "out_dir": "video",
  "work_dir": "video/work",
  "out_name": "loop",
@@ -115,5 +118,6 @@
    "Built with scripts from https://github.com/ChihChengLiang/montage"
   ],
   "credit_line": "- 「{title}」({accession_no}) — {source_page}"
- }
+ },
+ "seam_dissolve_beats": 1
 }

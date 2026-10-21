@@ -50,3 +50,21 @@ Prompt: "gentle airy instrumental, morning garden, natural history, soft acousti
 Seeds 11 and 22: both detected ~84.7-85 bpm; seed 22 chosen (2 s RMS CV 0.125 vs 0.314; beat-fit residual rms 13 ms vs 75 ms).
 Detected beat period 0.7061 s (84.97 bpm), eighth 0.3531 s. N=112 beats -> 3796222 samples = 79.088 s.
 Alignment: rolled by 2448 samples (51 ms); eighth-grid offset agreed (48 ms).
+
+## v5: loop points from the MIDDLE of the generation (find_loop.py) -> loop_seam.*, gould_loop_seam_fit.*
+Problem: loops cut from raw t=0 begin on the generation's intro and end ~79 s in (decay/ending), so the join is audible.
+`find_loop.py RAW P T0 L_BEATS OUT [--step 1] [--max-end 94] [--old a.wav,b.wav]` tries every start = T0 + k*P on the beat grid
+(start+L+xfade <= max-end), builds each loop (2-beat equal-power crossfade of head with the continuation raw[start+L:...]),
+and scores the join: distance between the 2-bar windows after vs before the join for chroma, log-mel, spectral centroid,
+log-RMS and onset density, each divided by the median distance between adjacent 2-bar windows elsewhere in the raw
+(1.0 = as different as neighbouring music; lower = smoother). Also rejects 1-beat RMS ratio > 1.5 across the join and decaying ends.
+- Gould: raw gould_raw.wav (seed 22), P=0.7061425, t0=0.051, 112 beats: best start 4.994 s, score 0.49 (old gould_loop_fit.wav: 0.97,
+  its 1-beat RMS ratio at join 1.81 vs 1.40 now). Then `fit_loop.py` to 3,796,800 samples (79.1 s, +0.015% stretch, beat period 0.70625 s)
+  -> gould_loop_seam_fit.wav/.mp3. Grid offset after the fit: 5 ms (< 1 frame), no roll.
+- Wood: the old raw_100bpm.wav could not be made smooth (best score 2.56; old loop 1.34; only a ~12 s start range, non-stationary).
+  Regenerated 110 s, loop-friendly prompt (static modal harmony, D pentatonic, repeating guzheng ostinato, woodblock, drone pad, no intro/ending/fade),
+  `gen_seed.py 110 75 caption_wood2.txt out_wood2 31 32 33` (~200-240 s each). Detected 75.0 bpm (seeds 31, 33; seed 32 gave 152 bpm).
+  Search on seed 31 (P=0.8): best start 23.186 s (start shifted -29 ms so the pulse lands at t=0; remaining offset 1 ms), score 0.44
+  (seed 33 scored 0.35 but with a worse beat fit; old loop 1.34). Output loop_seam.wav/.mp3, exactly 3,686,400 samples = 76.8 s.
+  `seam_check.py LOOP P` prints join step and per-beat RMS around the join of the tiled loop.
+Caveat: all numbers are signal statistics; nobody has listened.
